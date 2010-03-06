@@ -16,7 +16,7 @@ class CServices_FileManager
 // Создает папку
 // $_path - либо абс. путь либо отн. (отн. корня)
 //------------------------------------------------------------------------------
-    function CreateFolder($_path, $_mode = 0775)
+    function CreateFolder($_path)
     {
         $_path = strtr($_path,"\\","/");
         if (strpos($_path,ROOT_DIR) === 0) $_parts = explode("/",substr($_path, strlen(ROOT_DIR)));
@@ -29,7 +29,11 @@ class CServices_FileManager
             if ($_parts[$i])
             {
                 $_folder .= "/".$_parts[$i];
-                  if (!is_dir($_folder)) mkdir($_folder, 0777);
+                if (!is_dir($_folder)) 
+                {
+                    mkdir($_folder);
+                    $this->Kernel->chFile($_folder);
+                }
             }
         }
     }
@@ -122,9 +126,9 @@ class CServices_FileManager
 //------------------------------------------------------------------------------
 // Записать данные $_data в файл $_name
 //------------------------------------------------------------------------------
-    function WriteFile($_name, $_data, $_mode = 0755)
+    function WriteFile($_name, $_data)
     {
-        $this->CreateFolder(dirname($_name),$_mode);
+        $this->CreateFolder(dirname($_name));
         $this->Kernel->WriteFile($_name, $_data);
     }
 
@@ -244,4 +248,3 @@ class CServices_FileManager
     }
 }
 
-?>

@@ -36,6 +36,8 @@ class CKernel
     {
         $this->Error = &$this->Link("system.error", true,'Error');
         $this->ConfigManager = &$this->Link("system.config",true,'SystemConfig');
+        
+        $this->LoadKernelConfig('filesystem');
     }
 
 //------------------------------------------------------------------------------
@@ -131,7 +133,7 @@ class CKernel
             break;
             case INSTALL_PREFIX:
                 $controller = &$this->Link('system.install');
-                $controller->execute();
+                $controller->execute();            
             break;
             default:
                 $this->Mode = "normal";
@@ -188,6 +190,27 @@ class CKernel
         $_opened_file = fopen($_name,$_type);
         fwrite($_opened_file, $_data);
         fclose($_opened_file);
+        
+        $this->chFile($_name);
+    }
+    
+    public function chFile($filename)
+    {
+        if (isset($this->Config['filesystem']['chmod']))
+        {
+            chmod($filename, $this->Config['filesystem']['chmod']);
+        }
+        
+        if (isset($this->Config['filesystem']['chown']))
+        {
+            chown($filename, $this->Config['filesystem']['chown']);
+        }
+        
+        if (isset($this->Config['filesystem']['chgroup']))
+        {
+            chgrp($filename, $this->Config['filesystem']['chgroup']);
+        }
+        
     }
 
 //------------------------------------------------------------------------------
@@ -566,4 +589,3 @@ class CKernel
         $this->Error->optiwebError($_message,$_module=null,$_type = 'module',$_file = false, $_line = false);
     }
 }
-?>
