@@ -11,19 +11,15 @@ class CDataBase_mysql
     public $QCount = 0;
     public $Config = null;
     public $Resource = null;
-//  public $CurrentD =B;
 
     public $DI_Header = array();
     public $DI_Buffer = array();
     public $DI_Length = array();
 
-        //----------------------------------------------------------------
-        //                Открывает соединение с БД
-        //----------------------------------------------------------------
     function Init()
     {
-            $this->DBLink = null;
-            $this->Config = $this->Kernel->LoadConfig('system','database');
+        $this->DBLink = null;
+        $this->Config = $this->Kernel->LoadConfig('system','database');
     }
 
     function OpenDB()
@@ -58,382 +54,443 @@ class CDataBase_mysql
         }
     }
 
-        //----------------------------------------------------------------
-        //        Возвращает кол-во записей из внутреннего дескриптора выборки
-        //----------------------------------------------------------------
-        function getNumRows($_res = null)
+    function getNumRows($_res = null)
+    {
+        if ($this->Resource === false)
         {
-            if ($this->Resource === false)
-            {
-                Error('Mysql resource not setted','mysql');
-                return false;
-            }
-
-            return $_res ? mysql_num_rows($_res) : mysql_num_rows($this->Resource);
+            Error('Mysql resource not setted','mysql');
+            return false;
         }
 
-        function getNumFields($_res = null)
-        {
-            if ($this->Resource === false)
-            {
-                Error('Mysql resource not setted','mysql');
-                return false;
-            }
+        return $_res ? mysql_num_rows($_res) : mysql_num_rows($this->Resource);
+    }
 
-            return $_res ? mysql_num_fields($_res) : mysql_num_fields($this->Resource);
+    function getNumFields($_res = null)
+    {
+        if ($this->Resource === false)
+        {
+            Error('Mysql resource not setted','mysql');
+            return false;
         }
 
-        function sqlAddSlashes($_string = '', $_like = FALSE, $_crlf = FALSE)
+        return $_res ? mysql_num_fields($_res) : mysql_num_fields($this->Resource);
+    }
+
+    function sqlAddSlashes($_string = '', $_like = FALSE, $_crlf = FALSE)
+    {
+        if ($_like)
         {
-            if ($_like)
+            $_string = str_replace('\\', '\\\\\\\\', $_string);
+        }
+        else
+        {
+            $_string = str_replace('\\', '\\\\', $_string);
+        }
+
+        if ($_crlf)
+        {
+            $_string = str_replace("\n", '\n', $_string);
+            $_string = str_replace("\r", '\r', $_string);
+            $_string = str_replace("\t", '\t', $_string);
+        }
+
+        $_string = str_replace('\'', '\'\'', $_string);
+
+        return $_string;
+    }
+
+    function backquote($_name, $_doit = true)
+    {
+        if ($_doit && !empty($_name) && $_name != '*')
+        {
+            if (is_array($_name))
             {
-                $_string = str_replace('\\', '\\\\\\\\', $_string);
+                 $result = array();
+                 foreach ($_name as $_key => $_val)
+                 {
+                     $result[$_key] = '`' . $_val . '`';
+                 }
+                 return $result;
             }
             else
             {
-                $_string = str_replace('\\', '\\\\', $_string);
-            }
-
-            if ($_crlf)
-            {
-                $_string = str_replace("\n", '\n', $_string);
-                $_string = str_replace("\r", '\r', $_string);
-                $_string = str_replace("\t", '\t', $_string);
-            }
-
-            $_string = str_replace('\'', '\'\'', $_string);
-
-            return $_string;
-        }
-
-        function backquote($_name, $_doit = true)
-        {
-            if ($_doit && !empty($_name) && $_name != '*')
-            {
-                if (is_array($_name))
-                {
-                     $result = array();
-                     foreach ($_name as $_key => $_val)
-                     {
-                         $result[$_key] = '`' . $_val . '`';
-                     }
-                     return $result;
-                }
-                else
-                {
-                    return '`' . $_name . '`';
-                }
-            }
-            else
-            {
-                return $_name;
+                return '`' . $_name . '`';
             }
         }
-
-
-
-
-        function getAffectedRows($_res = null)
+        else
         {
-            if ($this->Resource === false)
+            return $_name;
+        }
+    }
+
+    function getAffectedRows($_res = null)
+    {
+        if ($this->Resource === false)
+        {
+            Error('Mysql resource not setted','mysql');
+            return false;
+        }
+
+        return is_resource($_res)           ? mysql_affected_rows($_res) :
+               is_resource($this->Resource) ? mysql_affected_rows($this->Resource):
+                                              mysql_affected_rows();
+    }
+
+    function getRecsCount($_table, $_exp = false, $_view_sql = false)
+    {
+        $this->Select($_table, "count(*) as count", $_exp, null, $_view_sql);
+        $_row = $this->GetNextRec();
+        return $_row['count'];
+    }
+
+    /**
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ $_table пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+     * $_exp
+     *
+     * @param string table пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ
+     * @param string field пїЅпїЅпїЅпїЅ
+     * @param string exp пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+     * @param boolean view_sql пїЅпїЅпїЅпїЅпїЅпїЅпїЅ SQL пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+     *
+     * @return integer пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+     */
+    function getRecsCountExt($_table, $_field, $_exp = false, $_view_sql = false)
+    {
+        $this->Select($_table, "count(".$_field.") as count", $_exp, null, $_view_sql);
+        $_row = $this->GetNextRec();
+        return $_row['count'];
+    }
+
+
+    function getLastID()
+    {
+        $this->OpenDB();
+        return mysql_insert_id($this->DBLink);
+    }
+
+    function getNextRec($_res = null, $assoc = true)
+    {
+        if ($assoc)
+        {
+            $fetchMethod = 'mysql_fetch_assoc';
+        }
+        else
+        {
+            $fetchMethod = 'mysql_fetch_row';
+        }
+    
+        return $_res ? $fetchMethod($_res) : ($this->Resource ? $fetchMethod($this->Resource) : trigger_error("argument is not a valid MySQL result resource", E_USER_NOTICE));
+    }
+
+    function getNextRecID($_res = null)
+    {
+        return $_res?mysql_fetch_row($_res):mysql_fetch_row($this->Resource);
+    }
+
+    function query($_sql, $_view_sql = false)
+    {
+        $this->OpenDB();
+        $this->QCount++;
+        if ($_view_sql) echo($_sql);
+        if (!($this->Resource = mysql_query($_sql,$this->DBLink)))
+        {
+            if (!$_view_sql)
             {
-                Error('Mysql resource not setted','mysql');
-                return false;
+                user_error("SQL пїЅпїЅпїЅпїЅпїЅпїЅ: ".$_sql, E_USER_NOTICE);
             }
-
-            return is_resource($_res)           ? mysql_affected_rows($_res) :
-                   is_resource($this->Resource) ? mysql_affected_rows($this->Resource):
-                                                  mysql_affected_rows();
+            Error(iconv('KOI8-R', 'CP1251', mysql_error($this->DBLink)),'mysql');
         }
+        return $this->Resource;
+    }
 
-        //----------------------------------------------------------------
-        //        Возвращает кол-во записей из таблицы $_table удовлетворяющих
-        //        условию $_exp
-        //----------------------------------------------------------------
-        function GetRecsCount($_table, $_exp = false, $_view_sql = false)
+    /**
+     * Р’С‹РїРѕР»РЅСЏРµС‚ SELECT Р·Р°РїСЂРѕСЃ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ СЂРµСЃСѓСЂСЃ СЂРµР·СѓР»СЊС‚Р°С‚Р°
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹ РёР»Рё РЅРµСЃРєРѕР»СЊРєРѕ С‚Р°Р±Р»РёС† СЃ JOIN
+     * @param string fields     РџРѕР»СЏ, С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ, РєРѕС‚РѕСЂС‹Рµ РЅСѓР¶РЅРѕ РІРµСЂРЅСѓС‚СЊ
+     * @param string cond       РЈСЃР»РѕРІРёРµ РІС‹Р±РѕСЂРєРё
+     * @param string params     РЎРµРєС†РёСЏ РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ Рє Р·Р°РїСЂРѕСЃСѓ GROUP, ORDER, LIMIT, HAVING
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function select($table, $fields = '*', $cond = null, $params = null, $viewSql = false)
+    {
+        $sql = sprintf(
+            'SELECT %s FROM %s %s %s;',
+            $fields,
+            $table,
+            $cond ? sprintf(' WHERE %s', $cond) : null,
+            $params
+        );
+        $this->query($sql, $viewSql);
+        return $this->Resource;
+    }
+
+    /**
+     * Р’С‹РїРѕР»РЅСЏРµС‚ INSERT Р·Р°РїСЂРѕСЃ
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹    
+     * @param string values     Р—РЅР°С‡РµРЅРёСЏ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ    
+     * @param string fields     РРјРµРЅР° РїРѕР»РµР№ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function insert($table, $values, $fields = false, $viewSql = false)
+    {
+        $sql = sprintf(
+            'INSERT INTO %s%s VALUES(%s);',
+            $table,
+            $fields ? sprintf('(%s)', $fields) : null,
+            $values
+        );
+        $this->query($sql, $viewSql);
+        return $this->Resource;
+    }
+
+    /**
+     * Р’С‹РїРѕР»РЅСЏРµС‚ REPLACE Р·Р°РїСЂРѕСЃ
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹    
+     * @param string values     Р—РЅР°С‡РµРЅРёСЏ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ    
+     * @param string fields     РРјРµРЅР° РїРѕР»РµР№ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function replace($table, $values, $fields = false, $viewSql = false)
+    {
+        $sql = sprintf(
+            'REPLACE INTO %s%s VALUES(%s);',
+            $table,
+            $fields ? sprintf('(%s)', $fields) : null,
+            $values
+        );
+        $this->query($sql, $viewSql);
+        return $this->Resource;
+    }
+
+    /**
+     * Р’С‹РїРѕР»РЅСЏРµС‚ DELETE Р·Р°РїСЂРѕСЃ
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹
+     * @param string cond       РЈСЃР»РѕРІРёРµ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function delete($table, $cond = false, $viewSql = false)
+    {
+        $sql = sprintf(
+            'DELETE FROM %s %s;',
+            $table,
+            $cond ? sprintf(' WHERE %s', $cond) : null
+        );
+        $this->query($sql, $viewSql);
+        return $this->Resource;
+    }
+
+    /**
+     * Р’С‹РїРѕР»РЅСЏРµС‚ UPDATE Р·Р°РїСЂРѕСЃ
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹
+     * @param string eqs        РџР°СЂС‹ РїРѕР»Рµ=Р·РЅР°С‡РµРЅРёРµ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ
+     * @param string cond       РЈСЃР»РѕРІРёРµ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function update($table, $eqs, $cond = false, $viewSql = false)
+    {
+        $sql = sprintf(
+            'UPDATE %s SET %s %s;',
+            $table,
+            $eqs,
+            $cond ? sprintf(' WHERE %s', $cond) : null
+        );
+        $this->query($sql, $viewSql);
+        return $this->Resource;
+    }
+
+    /**
+     * Р’С‹Р±РёСЂР°РµС‚ Р·Р°РїРёСЃРё РїРѕР»Рµ field РєРѕС‚РѕСЂС‹С… РІС…РѕРґРёС‚ РІ РјРЅРѕР¶РµСЃС‚РІРѕ items
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹ РёР»Рё РЅРµСЃРєРѕР»СЊРєРѕ С‚Р°Р±Р»РёС† СЃ JOIN
+     * @param string field      РџРѕР»Рµ, Р·РЅР°С‡РµРЅРёРµ РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ РЅР° РІС…РѕР¶РґРµРЅРёРµ РІРѕ РјРЅРѕР¶РµСЃС‚РІРѕ
+     * @param array  items      РњРЅРѕР¶РµСЃС‚РІРѕ Р·РЅР°С‡РµРЅРёР№
+     * @param string fields     РџРѕР»СЏ, С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ, РєРѕС‚РѕСЂС‹Рµ РЅСѓР¶РЅРѕ РІРµСЂРЅСѓС‚СЊ
+     * @param string condAnd    Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРµ СѓСЃР»РѕРІРёРµ РІС‹Р±РѕСЂРєРё
+     * @param string params     РЎРµРєС†РёСЏ РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ Рє Р·Р°РїСЂРѕСЃСѓ GROUP, ORDER, LIMIT, HAVING
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function selectValues($table, $field, $items, $fields = '*', $condAnd = null, $params = null, $viewSql = false)
+    {
+        $result = null;
+        if ($items)
         {
-            $this->Select($_table, "count(*) as count", $_exp, null, $_view_sql);
-            $_row = $this->GetNextRec();
-            return $_row['count'];
+            $cond  = sprintf(
+                '%s IN ("%s") %s',
+                $field, 
+                implode('", "', $items),
+                $condAnd ? sprintf(' AND %s', $condAnd)
+            );
+            $result = $this->select($table, $fields, $cond, $params, $viewSql);
         }
+        return $result;
+    }
 
-        /**
-         * Возвращает кол-во записей из таблицы $_table удовлетворяющих условию
-         * $_exp
-         *
-         * @param string table Таблица или вид
-         * @param string field Поле
-         * @param string exp Условие отбора
-         * @param boolean view_sql Вывести SQL запрос, для отладки
-         *
-         * @return integer Кол-во элементов, удовлетворяющих запросу
-         */
-        //
-        //
-        //----------------------------------------------------------------
-        function GetRecsCountExt($_table, $_field, $_exp = false, $_view_sql = false)
-        {
-            $this->Select($_table, "count(".$_field.") as count", $_exp, null, $_view_sql);
-            $_row = $this->GetNextRec();
-            return $_row['count'];
-        }
-
-
-        //----------------------------------------------------------------
-        //                Возвращает последний добавленный индиыикатор кортежа (id)
-        //----------------------------------------------------------------
-        function GetLastID()
-        {
-            $this->OpenDB();
-            return mysql_insert_id($this->DBLink);
-        }
-
-        //----------------------------------------------------------------
-        //        Вовращает очередной кортеж из внутреннего или внешнего
-        // дескриптора
-        //----------------------------------------------------------------
-        function GetNextRec($_res = null, $assoc = true)
-        {
-            if ($assoc)
-            {
-                $fetchMethod = 'mysql_fetch_assoc';
-            }
-            else
-            {
-                $fetchMethod = 'mysql_fetch_row';
-            }
+    /**
+     * Р’С‹РїРѕР»РЅСЏРµС‚ INSERT Р·Р°РїСЂРѕСЃ РґР»СЏ Р·Р°РїРёСЃРё (Р°СЃСЃРѕС†РёР°С‚РёРІРЅС‹Р№ РјР°СЃСЃРёРІ)
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹    
+     * @param array  items      Р—Р°РїРёСЃСЊ, РіРґРµ РєР»СЋС‡Рё СЌС‚Рѕ РёРјРµРЅР° РїРѕР»РµР№    
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function insertValues($table, $items, $viewSql = false)
+    {
+        $values = sprintf(
+            '"%s"'
+            implode(
+                '", "',
+                array_values($items)
+            )
+        );
         
-            return $_res ? $fetchMethod($_res) : ($this->Resource ? $fetchMethod($this->Resource) : trigger_error("argument is not a valid MySQL result resource", E_USER_NOTICE));
-        }
+        $fields = implode(
+            ', ',
+            array_keys($items)
+        );
 
-        function getNextRecID($_res = null)
-        {
-            return $_res?mysql_fetch_row($_res):mysql_fetch_row($this->Resource);
-        }
+        return $this->insert($table, $values, $fields, $viewSql);
+    }
 
-        //----------------------------------------------------------------
-        //                Выполняет запрос $_sql
-        //----------------------------------------------------------------
-        function &Query($_sql,$_view_sql = false)
+    /**
+     * Р’С‹РїРѕР»РЅСЏРµС‚ REPLACE Р·Р°РїСЂРѕСЃ РґР»СЏ Р·Р°РїРёСЃРё (Р°СЃСЃРѕС†РёР°С‚РёРІРЅС‹Р№ РјР°СЃСЃРёРІ)
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹    
+     * @param array  items      Р—Р°РїРёСЃСЊ, РіРґРµ РєР»СЋС‡Рё СЌС‚Рѕ РёРјРµРЅР° РїРѕР»РµР№    
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function replaceValues($table, $items, $viewSql = false)
+    {
+        $values = sprintf(
+            '"%s"'
+            implode(
+                '", "',
+                array_values($items)
+            )
+        );
+        
+        $fields = implode(
+            ', ',
+            array_keys($items)
+        );
+
+        return $this->replace($table, $values, $fields, $viewSql);
+    }
+
+    /**
+     * РЈРґР°Р»СЏРµС‚ Р·Р°РїРёСЃРё РїРѕР»Рµ field РєРѕС‚РѕСЂС‹С… РІС…РѕРґРёС‚ РІ РјРЅРѕР¶РµСЃС‚РІРѕ items
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹
+     * @param string field      РџРѕР»Рµ, Р·РЅР°С‡РµРЅРёРµ РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ РЅР° РІС…РѕР¶РґРµРЅРёРµ РІРѕ РјРЅРѕР¶РµСЃС‚РІРѕ
+     * @param array  items      РњРЅРѕР¶РµСЃС‚РІРѕ Р·РЅР°С‡РµРЅРёР№
+     * @param string condAnd    Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРµ СѓСЃР»РѕРІРёРµ РІС‹Р±РѕСЂРєРё
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function deleteValues($table, $field, $items, $condAdd = null, $viewSql=false)
+    {
+        $result = null;
+        if ($items)
         {
-            $this->OpenDB();
-            $this->QCount++;
-            if ($_view_sql) echo($_sql);
-            if (!($this->Resource = mysql_query($_sql,$this->DBLink)))
+            $cond  = sprintf(
+                '%s IN ("%s") %s',
+                $field, 
+                implode('", "', $items),
+                $condAnd ? sprintf(' AND %s', $condAnd)
+            );
+            $result = $this->delete($table, $cond, $viewSql);
+        }
+        return $result;
+    }
+
+    /**
+     * Р’С‹РїРѕР»РЅСЏРµС‚ UPDATE Р·Р°РїСЂРѕСЃ РґР»СЏ Р·Р°РїРёСЃРё (Р°СЃСЃРѕС†РёР°С‚РёРІРЅС‹Р№ РјР°СЃСЃРёРІ)
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹    
+     * @param array  items      Р—Р°РїРёСЃСЊ, РіРґРµ РєР»СЋС‡Рё СЌС‚Рѕ РёРјРµРЅР° РїРѕР»РµР№    
+     * @param string cond       РЈСЃР»РѕРІРёРµ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function updateValues($table, $items, $cond = false, $viewSql=false)
+    {
+        $result = null;
+        if ($items)
+        {
+            $eqs = array();
+            foreach ($items as $key => $value)
             {
-                if (!$_view_sql)
-                {
-                    user_error("SQL запрос: ".$_sql, E_USER_NOTICE);
-                }
-                Error(iconv('KOI8-R', 'CP1251', mysql_error($this->DBLink)),'mysql');
+                $eqs[] = sprintf('%s="%s"', $key, $value);
             }
-            return $this->Resource;
+            
+            $result = $this->update(
+                $_table,
+                implode(', ', $eqs),
+                $cond,
+                $viewSql
+            );
         }
+        return $result;
+    }
 
-
-        //----------------------------------------------------------------
-        //                Производит выборку данных(полей $_fields) из таблицы $_table
-        //        с условием $_exp и параметрами $_opt
-        //----------------------------------------------------------------
-        function &Select($_table, $_fields = '*', $_cond = null, $_params = null,$_view_sql = false)
+    /**
+     * РћР±РЅРѕРІР»СЏРµС‚ Р·Р°РїРёСЃРё РїРѕР»Рµ field РєРѕС‚РѕСЂС‹С… РІС…РѕРґРёС‚ РІ РјРЅРѕР¶РµСЃС‚РІРѕ items
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹
+     * @param string eqs        РџР°СЂС‹ РїРѕР»Рµ=Р·РЅР°С‡РµРЅРёРµ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ
+     * @param string field      РџРѕР»Рµ, Р·РЅР°С‡РµРЅРёРµ РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ РЅР° РІС…РѕР¶РґРµРЅРёРµ РІРѕ РјРЅРѕР¶РµСЃС‚РІРѕ
+     * @param array  items      РњРЅРѕР¶РµСЃС‚РІРѕ Р·РЅР°С‡РµРЅРёР№
+     * @param string condAnd    Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРµ СѓСЃР»РѕРІРёРµ РІС‹Р±РѕСЂРєРё
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function updateSetOf($table, $eqs, $field, $items, $condAdd = null, $viewSql = false)
+    {
+        $result = null;
+        
+        if ($items)
         {
-                if ($_cond) $_cond = " WHERE ".$_cond;
-                $_sql = "SELECT ".$_fields." FROM ".$_table." ".$_cond." ".$_params." ;";
-//print $_sql.'<br>';
-                $this->Query($_sql,$_view_sql);
-                return $this->Resource;
+            $cond  = sprintf(
+                '%s IN ("%s") %s',
+                $field, 
+                implode('", "', $items),
+                $condAnd ? sprintf(' AND %s', $condAnd)
+            );
+            $result = $this->update($table, $eqs, $cond, $viewSql);
         }
+        return $result;
+    }
 
-        //----------------------------------------------------------------
-        //                Вставляет кортеж(и) в таблицу $_table со значениями $_values
-        //        в поля $_fields
-        //----------------------------------------------------------------
-        function &Insert($_table, $_values, $_fields = false, $_view_sql = false)
+    /**
+     * РћР±РЅРѕРІР»СЏРµС‚ Р·Р°РїРёСЃРё РїРѕР»Рµ field РєРѕС‚РѕСЂС‹С… РІС…РѕРґРёС‚ РІ РјРЅРѕР¶РµСЃС‚РІРѕ items
+     * 
+     * @param string table      РРјСЏ С‚Р°Р±Р»РёС†С‹
+     * @param array  values     Р—Р°РїРёСЃСЊ, РіРґРµ РєР»СЋС‡Рё СЌС‚Рѕ РёРјРµРЅР° РїРѕР»РµР№
+     * @param string field      РџРѕР»Рµ, Р·РЅР°С‡РµРЅРёРµ РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ РЅР° РІС…РѕР¶РґРµРЅРёРµ РІРѕ РјРЅРѕР¶РµСЃС‚РІРѕ
+     * @param array  items      РњРЅРѕР¶РµСЃС‚РІРѕ Р·РЅР°С‡РµРЅРёР№
+     * @param string condAnd    Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРµ СѓСЃР»РѕРІРёРµ РІС‹Р±РѕСЂРєРё
+     * @param bool   viewSql    Р’С‹РІРµСЃС‚Рё РїРѕР»СѓС‡РёРІС€РёР№ SQL Р·Р°РїСЂРѕСЃ
+     */
+    function updateSetOfValues($table, $values, $field, $items, $condAdd = null, $viewSql = false)
+    {
+        $result = null;
+        
+        if ($items)
         {
-                if ( $_fields !== false) $_fields = "(".$_fields.")";
-                $_sql = "INSERT INTO ".$_table.$_fields."  VALUES(".$_values.");";
-        $this->Query($_sql,$_view_sql);
-                return $this->Resource;
+            $cond  = sprintf(
+                '%s IN ("%s") %s',
+                $field, 
+                implode('", "', $items),
+                $condAnd ? sprintf(' AND %s', $condAnd)
+            );
+    
+            $result = $this->updateValues($table, $values, $cond, $viewSql);
         }
+        return $result;
+    }
 
         //----------------------------------------------------------------
-        // Заменяет или добавляет новый кортеж(и) в таблицу $_table со значениями $_values
-        // в поля $_fields
-        //----------------------------------------------------------------
-        function &Replace($_table, $_values, $_fields = false, $_view_sql = false)
-        {
-            if ( $_fields !== false)
-            {
-                $_fields = "(".$_fields.")";
-            }
-            $_sql = "REPLACE INTO ".$_table.$_fields."  VALUES(".$_values.");";
-            $this->Query($_sql,$_view_sql);
-            return $this->Resource;
-        }
-
-
-        //----------------------------------------------------------------
-        //        Удаляет кортежи из таблицы $_table удовлетворяющие условию
-        //        $_exp
-        //----------------------------------------------------------------
-        function &Delete($_table, $_exp = false,$_view_sql = false)
-        {
-                if ($_exp !== false) $_exp = " WHERE ".$_exp;
-                $_sql = "DELETE FROM ".$_table." ".$_exp." ;";
-        $this->Query($_sql,$_view_sql);
-                return $this->Resource;
-        }
-
-        //----------------------------------------------------------------
-        //                Обновляет кортеж(и) из таблицы $_table удовлетворяющие
-        //        условию $_exp с помощью присваиваний $_eqs
-        //----------------------------------------------------------------
-        function &Update($_table, $_eqs, $_exp = false, $_view_sql = false)
-        {
-            if ($_exp !== false)
-            {
-                $_exp = " WHERE ".$_exp;
-            }
-
-            $_sql = "UPDATE ".$_table." SET ".$_eqs." ".$_exp." ;";
-            $this->Query($_sql,$_view_sql);
-            return $this->Resource;
-        }
-
-    //----------------------------------------------------------------
-        //                Выбирает кортежи из таблицы $_table удовлетворяющие условию
-        //        принадлежности атрибута $_field одному из значений массива
-        // $_items
-        //----------------------------------------------------------------
-        function SelectValues($_table,$_field,$_items,$_fields='*',$_expadd = null, $_params = null, $_view_sql=false)
-        {
-
-            $_exp  = "";
-              foreach($_items as $k=>$v)
-                {
-                        if ($_exp!="") $_exp.=",";
-                        $_exp.="$v";
-                }
-                $_exp = $_field." IN (".$_exp.")";
-        if ($_expadd) $_exp = $_expadd.' and '.$_exp;
-
-                return sizeof($_items)?$this->Select($_table, $_fields, $_exp, $_params, $_view_sql):false;
-        }
-
-    //----------------------------------------------------------------
-        //                Вставляет кортеж в таблицу $_table со значениями и полями
-        //        из массива $_items
-        //----------------------------------------------------------------
-        function &InsertValues($_table,$_items,$_view_sql = false)
-        {
-                $_values = "";
-                $_fields = "";
-
-            foreach($_items as $k=>$v)
-                {
-                        if ($_values != "") $_values.=",";
-                        if ($_fields != "") $_fields.=",";
-            if (!preg_match('/^(now|date)\\(\\)/is',$v)) $v = "'".$v."'";
-                        $_values.="$v";
-                        $_fields.=$k;
-                }
-                return $this->Insert($_table,$_values,$_fields,$_view_sql);
-        }
-
-        //----------------------------------------------------------------
-        // Вставляет кортеж в таблицу $_table со значениями и полями
-        // из массива $_items
-        //----------------------------------------------------------------
-        function &ReplaceValues($_table,$_items,$_view_sql = false)
-        {
-            $_values = "";
-            $_fields = "";
-
-            foreach($_items as $k=>$v)
-            {
-                if ($_values != "") $_values.=",";
-                if ($_fields != "") $_fields.=",";
-                if (!preg_match('/^(now|date)\\(\\)/is',$v)) $v = "'".$v."'";
-                $_values.="$v";
-                $_fields.=$k;
-            }
-            return $this->Replace($_table,$_values,$_fields,$_view_sql);
-        }
-
-    //----------------------------------------------------------------
-        //                Удаляет кортежи из таблицы $_table удовлетворяющие условию
-        //        принадлежности атрибута $_field одному из значений массива
-        // $_items
-        //----------------------------------------------------------------
-        function DeleteValues($_table,$_field,$_items,$_exp_add=null,$_view_sql=false)
-        {
-
-            $_exp  = "";
-              foreach($_items as $k=>$v)
-                {
-                        if ($_exp!="") $_exp.=",";
-                        $_exp.="$v";
-                }
-                $_exp = $_field." IN (".$_exp.")";
-        if ($_exp_add) $_exp .= ' AND '.$_exp_add;
-
-                return sizeof($_items)?$this->Delete($_table, $_exp,$_view_sql):false;
-        }
-
-        //----------------------------------------------------------------
-        //                Обновляет кортеж(и) из таблицы $_table удовлетворяющие
-        //        условию $_exp с помощью присваиваний из массива $_items
-        //----------------------------------------------------------------
-        function UpdateValues($_table,$_items,$_exp = false,$_view_sql=false)
-        {
-            $_eqs = false;
-            foreach($_items as $_key => $_value)
-            {
-                if ($_eqs)
-                {
-                    $_eqs .= ", ";
-                }
-
-                if (!preg_match('/^(now|date)[^\(]*\([^\)]*\)|null/is',$_value))
-                {
-                    $_value = "'".$_value."'";
-                }
-                $_eqs .= $_key."=".$_value;
-            }
-            return $_eqs ? $this->Update($_table,$_eqs,$_exp,$_view_sql) : false;
-        }
-
-
-       function UpdateSetOf($_table,$_eqs,$_field,$_items, $_view_sql=false)
-       {
-           $_exp  = "";
-             foreach($_items as $k=>$v)
-               {
-                       if ($_exp!="") $_exp.=",";
-                       $_exp.="$v";
-               }
-               $_exp = $_field." IN (".$_exp.")";
-
-               return sizeof($_items)?$this->Update($_table,$_eqs,$_exp,$_view_sql):false;
-
-       }
-
-        function UpdateSetOfValues($_table,$_values,$_field,$_items, $_view_sql=false)
-        {
-            $_exp  = "";
-              foreach($_items as $k=>$v)
-                {
-                        if ($_exp!="") $_exp.=",";
-                        $_exp.="$v";
-                }
-                $_exp = $_field." IN (".$_exp.")";
-
-                return sizeof($_items)?$this->UpdateValues($_table,$_values,$_exp,$_view_sql):false;
-
-        }
-
-        //----------------------------------------------------------------
-        // Очищает все таблицы из значений массива $_tables
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ $_tables
         //----------------------------------------------------------------
         function ClearTables($_tables)
         {
@@ -441,7 +498,7 @@ class CDataBase_mysql
         }
 
         //----------------------------------------------------------------
-        // Вставка массива заначений с буффером
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         //----------------------------------------------------------------
     function setSIHeader($_name,$_table,$_fields = null ,$_length = 500,$_delayed = false)
     {
@@ -557,9 +614,9 @@ class CDataBase_mysql
         }
 
 /*
-    27 июня 2004 года
-    Назначение:  создает SQL запрос на создание таблицы по имени таблицы
-    Применение: копирование структур таблицы из одной БД в другую
+    27 пїЅпїЅпїЅпїЅ 2004 пїЅпїЅпїЅпїЅ
+    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ SQL пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 */
 
     function getTableStructure($table_from, $table_to, $remove = false)
@@ -977,4 +1034,3 @@ class CDataBase_mysql
     }
 }
 
-?>
