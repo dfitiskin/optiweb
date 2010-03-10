@@ -1,7 +1,4 @@
 <?php
-/**
- * CKernel класс
- */
 
 class CKernel
 {
