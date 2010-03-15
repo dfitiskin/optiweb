@@ -454,14 +454,18 @@ class CBackend_TreeNode
 
     function deleteBlockSlots()
     {
-		$_childs = $this->Block->childNodes;
-        for ($i=0; $i < $_childs->length; $i++)
+        $removeNodes = array();
+        foreach ($this->Block->childNodes as $node)
         {
-        	$_node = $_childs->item($i);
-            if ($_node->nodeName == 'slot')
+            if ('slot' == $node->nodeName)
             {
-                $_node->parentNode->removeChild($_node);
+                $removeNodes[] = $node;
             }
+        }
+        
+        foreach ($removeNodes as $node)
+        {
+            $node->parentNode->removeChild($node);
         }
     }
 
