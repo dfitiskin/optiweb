@@ -707,9 +707,8 @@ class CBackend_Blocks
 
     function ModifyBlock($_params,$_url_params)
     {
-//        Dump($_params);
-            switch ($_params['action'])
-            {
+        switch ($_params['action'])
+        {
             case 'switch_mode':
                     $_state = $this->User->getParam('html_editor');
                 $_state = $_state?0:1;
@@ -936,56 +935,74 @@ class CBackend_Blocks
 
     function ModifyTemplateBlock($_params,$_url_params)
     {
+        array_shift($_url_params);
+        array_shift($_url_params);
 
-            array_shift($_url_params);
-            array_shift($_url_params);
-
-            $TreeNode = &$this->Kernel->Link('backend.treenode');
-            $TreeNode->setProfile($this->ProfileAlias);
-            $TreeNode->setPath($_url_params);
-            $TreeNode->setNode();
-            $TreeNode->findBlock($_params['block'],$_params['scope']);
+        $TreeNode = &$this->Kernel->Link('backend.treenode');
+        $TreeNode->setProfile($this->ProfileAlias);
+        $TreeNode->setPath($_url_params);
+        $TreeNode->setNode();
+        $TreeNode->findBlock($_params['block'],$_params['scope']);
 
         if ($TreeNode->isBlockExists())
+        {
             switch ($_params['action'])
             {
                 case 'upd':
-                $TreeNode->setBlockDescr($_params['descr']);
-                    $_upd = isset($_params['upd'])?$_params['upd']:array();
-                                $_templ = $TreeNode->getBlockTemplate('main');
-                if ($_templ != $_params['templ']) $TreeNode->updBlockTemplate('main',$_params['templ']);
-                $TPLManager = &$this->Kernel->Link('template.manager');
-                $_slots = $TPLManager->getSlotsList($_params['templ'],'_blocks',$this->ProfileAlias);
-                $_slots_data = array_flip($_slots);
-                foreach ($_slots_data as $k=>$v)
-                {
+                    $TreeNode->setBlockDescr($_params['descr']);
+                    $_upd = isset($_params['upd']) ? $_params['upd'] : array();
+                    $_templ = $TreeNode->getBlockTemplate('main');
+                    
+                    if ($_templ != $_params['templ']) 
+                    {
+                        $TreeNode->updBlockTemplate('main',$_params['templ']);
+                    }
+
+                    $TPLManager = &$this->Kernel->Link('template.manager');
+                    $_slots = $TPLManager->getSlotsList($_params['templ'],'_blocks',$this->ProfileAlias);
+                    $_slots_data = array_flip($_slots);
+                    
+                    foreach ($_slots_data as $k=>$v)
+                    {
                         if (isset($_upd[$k]))
-                                                $_slots_data[$k] = $_upd[$k];
-                    else
+                        {
+                            $_slots_data[$k] = $_upd[$k];
+                        }
+                        else
+                        {
                             $_slots_data[$k] = array(
                                 'descr'        => $k,
                                 'type'        => "_stat",
                                 'value'        => '',
-                            'descr'        => ''
-                        );
-                }
-                                  $TreeNode->deleteBlockSlots();
-
-                if (sizeof($_slots_data))
-                    foreach($_slots_data as $k=>$v)
-                {
-
-                    if (!$v['type'])
-                            $v['type'] = "_stat";
-                    if (!isset($v['value'])) $v['value'] = '';
-                    $_type = ($v['type']=='_stat')?'s':'d';
-                    $_value = ($_type=='s')?$v['value']:$v['type'];
-
-                           $TreeNode->setBlockSlot($k,$v['descr'],$_type,$_value);
-                }
-                $TreeNode->Save();
-
-            break;
+                                'descr'        => ''
+                            );
+                        }
+                    }
+                    $TreeNode->deleteBlockSlots();
+    
+                    if (sizeof($_slots_data))
+                    {
+                        foreach($_slots_data as $k=>$v)
+                        {
+        
+                            if (!$v['type'])
+                            {
+                                $v['type'] = "_stat";
+                            }
+                            
+                            if (!isset($v['value'])) 
+                            {
+                                $v['value'] = '';
+                            }
+                            $_type = ($v['type']=='_stat')?'s':'d';
+                            $_value = ($_type=='s')?$v['value']:$v['type'];
+        
+                            $TreeNode->setBlockSlot($k,$v['descr'],$_type,$_value);
+                        }
+                    }
+                    $TreeNode->Save();
+                break;
+            }
         }
     }
 
