@@ -97,7 +97,7 @@ class CDataset_abstract
                 {
                     $nameParts = explode('.', $_name);
                     $target = $this;
-                    for ($level = 0, $levels = count($nameParts); $level < $levels && $target; $level++)
+                    for ($level = 0, $levels = count($nameParts); $level < $levels &&  (null !== $target); $level++)
                     {
                         $name = $nameParts[$level];
                         if (is_object($target))
