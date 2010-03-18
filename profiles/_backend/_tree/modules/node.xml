@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+			<block name="content" source="s"/>
+	</ruleset>
+	<childs>
+		<ruleset>
+			<controlobject name="backend.modules"/>
+			<mainobject name="backend.modules"/>
+			<block name="part_title" descr="" source="t">
+				<template name="main" file="part_title.tpl"/>
+				<slot name="miniature" type="s" value="modules" descr=""/>
+				<slot name="name" type="s" value="Модули" descr=""/>
+			</block>
+			<block name="tree_menu" source="d" object="backend.modules">
+				<template name='main' type='u' file='module_tree.tpl'/>
+				<param name='mode' value='tree'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

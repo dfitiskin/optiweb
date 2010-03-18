@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+	</ruleset>
+	<childs>
+		<ruleset>
+			<block name="content" source="d" object="backend.inter">
+				<template name='main' type='u' file='inter_version.tpl'/>
+				<param name='mode' value='manager'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

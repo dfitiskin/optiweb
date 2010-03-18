@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<package version="1.0">
+	<name>template</name>
+	<summary>Шаблонный механизм</summary>
+	<description>N/A</description>
+	<maintainers>
+		<maintainer>
+			<user>fitiskin</user>
+			<name>Дмитрий Фитискин</name>
+			<email>fitiskin@dominion.ru</email>
+			<role>developer</role>
+		</maintainer>
+	</maintainers>
+	<release>
+		<version>1.1.0-b</version>
+		<date>2006-12-21</date>
+		<state>beta</state>
+		<notes>
+			<note>Расширен функционал класс CDataset_Pages. Добавлена поддержка диапазона страниц</note>
+			<note>Не имеет обратной совместимости</note>
+		</notes>
+		<deps>
+			<dep name="kernel" type="module" version="1.0.0-b" rel="ge" />
+		</deps>
+	</release>
+	<changelog>
+		<release>
+			<version>1.1.1-b</version>
+			<date>2006-12-23</date>
+			<state>beta</state>
+			<notes>
+				<note>Исправлена ошибка в DataSet_Array - передача дочернего набора данных должна осуществляться по ссылке</note>
+			</notes>
+			<deps>
+				<dep name="kernel" type="module" version="1.0.0-b" rel="ge" />
+			</deps>
+		</release>	
+		<release>
+			<version>1.0.0-b</version>
+			<date>2006-11-13</date>
+			<state>beta</state>
+			<deps>
+				<dep name="kernel" type="module" version="1.0.0-b" rel="ge" />
+			</deps>
+		</release>
+	</changelog>
+</package>

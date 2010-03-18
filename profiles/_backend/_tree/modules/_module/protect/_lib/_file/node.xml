@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+	</ruleset>
+	<childs>
+		<ruleset>
+			<block name="content" source="d" object="backend.modules">
+				<template name='array' type='u' file='module_config_array.tpl'/>
+				<template name='data' type='u' file='module_config_data.tpl'/>
+				<template name='main' type='u' file='module_protect_file_main.tpl'/>
+				<template name='array' type='u' file='module_config_array.tpl'/>
+				<template name='wlist' type='u' file='module_warnings_list.tpl'/>
+				<template name='wfield' type='u' file='module_warnings_field.tpl'/>
+				<template name='wother' type='u' file='module_warnings_other.tpl'/>
+				<param name='mode' value='protect_file'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

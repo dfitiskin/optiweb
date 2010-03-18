@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+	</ruleset>
+	<childs>
+		<ruleset>
+			<block name="content" source="d" object="backend.inter">
+				<param name='mode' value='module'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+		<block name="content" source="d" object="backend.profiles">
+			<template name='list' type='u' file='profile_list.tpl'/>
+			<param name='mode' value='list'/>
+		</block>
+	</ruleset>
+	<childs>
+		<ruleset>
+			<controlobject name="backend.profiles"/>
+			<mainobject name="backend.profiles"/>
+		</ruleset>
+	</childs>
+</node>

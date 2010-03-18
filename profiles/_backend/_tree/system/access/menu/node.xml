@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+		<block name="content" source="d" object="backend.access">
+			<template name='main' type='u' file='access_menu.tpl'/>
+			<param name='mode' value='menu'/>
+		</block>
+	</ruleset>
+	<childs>
+		<ruleset>
+		</ruleset>
+	</childs>
+</node>

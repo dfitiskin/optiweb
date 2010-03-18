@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+		<block name="content" source="s" />
+	</ruleset>
+	<childs>
+		<ruleset>
+			<controlobject name="backend.access"/>
+			<mainobject name="backend.access"/>
+			<block name="tab_menu" source="d" object="backend.access">
+				<template name='main' type='u' file='tab_menu.tpl'/>
+				<param name='mode' value='tab_menu'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

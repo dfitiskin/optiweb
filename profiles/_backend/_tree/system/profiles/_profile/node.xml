@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+			<block name="content" source="d" object="backend.profiles">
+				<template name='property' type='u' file='profile_prop.tpl'/>
+				<param name='mode' value='property'/>
+			</block>
+	</ruleset>
+	<childs>
+		<ruleset>
+		</ruleset>
+	</childs>
+</node>

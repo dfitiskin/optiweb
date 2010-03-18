@@ -1,0 +1,1 @@
+<textarea style="width:<!--#slot src='editor_width'-->; height:<!--#slot src='editor_height'-->" rows='10' cols='50' name='<!--#slot src='editor_name'-->'><!--#slot src='htmldoc' filter='html'--></textarea>

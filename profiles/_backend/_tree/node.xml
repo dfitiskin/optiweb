@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+		<template file="be_er403_main.tpl" name="403"/>
+		<block name="content" source="s" />
+	</ruleset>
+	<childs>
+		<ruleset>
+			<controlobject name="backend.auth"/>
+			<template file="be_er403_second.tpl" name="403"/>
+			<template type="u" file="be_default.tpl"/>
+			<template file="be_er404.tpl" name="404"/>			
+			<controlobject name='backend.auth'/>
+			<block name="menu" source="d" object='backend.navigator' >
+				<template type="u" file="navigator.tpl"/>
+				<param name='mode' value='main'/>
+			</block>
+			<block name="personal_menu" source="d" object='backend.navigator' >
+				<template type="u" file="navigator_personal.tpl"/>
+				<param name='mode' value='personal'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

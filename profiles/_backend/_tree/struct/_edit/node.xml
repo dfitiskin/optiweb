@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+	</ruleset>
+	<childs>
+		<ruleset>
+			<template type='u' file='be_dialog.tpl'/>
+			<block name="content" source="d" object="backend.blocks">
+				<template name='static' file='block_edit_static.tpl'/>
+				<template name='dinamic' file='block_edit_dinamic.tpl'/>
+        			<template name='template' file='block_edit_template.tpl'/>
+				<param name='mode' value='edit'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

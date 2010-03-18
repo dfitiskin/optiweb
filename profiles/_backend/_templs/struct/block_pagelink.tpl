@@ -1,0 +1,1 @@
+<div class="seelink"><a target="site" class="seelink" href="<!--#slot src='pageurl'-->">Посмотреть на сайте</a></div>

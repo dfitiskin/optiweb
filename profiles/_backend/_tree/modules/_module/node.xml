@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+			<block name="content" source="d" object="backend.modules">
+				<template name='main' type='u' file='module_info.tpl'/>
+				<param name='mode' value='info'/>
+			</block>
+	</ruleset>
+	<childs>
+		<ruleset>
+		</ruleset>
+	</childs>
+</node>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+		<block name="pagelink" source="d" object="backend.struct">
+			<template name='main' type='u' file='block_pagelink.tpl'/>
+			<param name='mode' value='pagelink'/>
+		</block>
+	</ruleset>
+	<childs>
+		<ruleset>
+			<controlobject name="backend.struct"/>
+			<mainobject name="backend.struct"/>
+			<block name="part_title" descr="" source="t">
+				<template name="main" file="part_title.tpl"/>
+				<slot name="miniature" type="s" value="struct" descr=""/>
+				<slot name="name" type="s" value="Структура" descr=""/>
+			</block>			
+			<block name="tab_menu" source="d" object="backend.struct">
+				<template name='main' type='u' file='tab_menu.tpl'/>
+				<param name='mode' value='tab_menu'/>
+			</block>
+			<block name="tree_menu" source="d" object="backend.struct">
+				<template name='main' type='u' file='struct_tree.tpl'/>
+				<param name='mode' value='tree'/>
+			</block>
+			<block name="content" source="d" object="backend.blocks">
+				<template name='main' type='u' file='block_main.tpl'/>
+				<template name='link' type='u' file='block_main_link.tpl'/>
+				<template name='module' type='u' file='block_main_module.tpl'/>
+				<param name='mode' value='main'/>
+			</block>
+			<block name="pagelink" source="d" object="backend.struct">
+				<template name='main' type='u' file='block_pagelink.tpl'/>
+				<param name='mode' value='pagelink'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

@@ -1,0 +1,174 @@
+body {margin:0; padding:0}
+td, body {font:70% tahoma}
+a {color:#005cb9}
+a:hover {color:#f00}
+h1 {font:140% arial}
+h2 {font:130% arial}
+.nav_link {color:#4f7693;        text-decoration:none;        font:bold}
+.nav_link:hover {color:#c75a5e}
+.nav_link_a {color:#000; text-decoration:none; font:bold}
+.inn {border:1px solid #bbb; font:12px tahoma; width:95%; padding:3px 0 3px 4px; //height: 23px;}
+.inn_s {border:1px solid #bbb; font:11px tahoma; width:10%; padding:1 0 0 4}
+input {font:11px tahoma}
+select {font:11px tahoma; color:#333333}
+textarea {font:11px tahoma}
+.del_label {color:#00f;        text-decoration:underline; cursor:hand}
+.part_title {font:bold 130% arial; text-transform:uppercase; color:#85a1b5; margin:10 0 0 10}
+.tabmenu {color:#2787d0; text-decoration:none}
+.tabmenu:hover {color:#000}
+.tabmenua {color:#fff; font:bold; text-decoration:none}
+.tabmenua:hover {color:white}
+.menu_pers {color:#1571a2; text-decoration:none}
+.menu_pers:hover {color:#014970; text-decoration:underline}
+.optblue {background:#d1ecf3}
+.optgray {background:#eee}
+.table_row tr {height:30}
+
+p.name {margin: 0; color: gray;pading:0;}
+img.name {margin: 5px; }
+.link{cursor: pointer; cursor: hand;padding: 0 4px 2px 4px;width: auto;overflow: visible;border:none;background-color: #fff;height:17px;font:normal 11px tahoma;color:gray;text-decoration: underline;}
+a:hover {color: #005CB9}
+.sort{width:100px;}
+.delete{color:#b4484d;}
+table.list{width:100%;border-collapse:collapse;}
+table.list td{padding:5px;}
+table.list td.stick{padding:5px 0 5px 0;}
+
+
+.inputlink
+{border: 0;	cursor: pointer; 	text-decoration: underline; 	color: gray;background: none;margin-top: -2pt;}
+p.name {margin: 0; color: gray}
+img.name {margin: 5px; }
+button{border:none;background-color: #fff;height:17px;padding-bottom:2px;font:normal 11px tahoma;color:color: gray;text-decoration: underline;}
+button:hover{cursor:pointer;cursor:hand;}
+
+
+table.data {}
+table.data tr {}
+table.data tr th {font-size: 12px;font-weight: bold;width: 70px;text-align: left;}
+table.data tr td {font-size: 12px;font-weight: normal;text-align: left;width: auto;}
+
+table.storage {width: 94%;margin: 10px 0;}
+table.storage tr {}
+table.storage tr th {}
+table.storage tr td.tl {width: 1%;height: 17px;background: url(/images/__backend/common/frame-1.gif) no-repeat 0 0;}
+table.storage tr td.tc {width: 98%;height: 17px;background: url(/images/__backend/common/frame-ub.gif) repeat-x 0 0;}
+table.storage tr td.tc .title {float: left; background-color: #fff; color:gray; text-align: center;padding: 0 10px;white-space: nowrap;font-weight: bold;}
+table.storage tr td.tr {width: 1%;height: 17px;background: url(/images/__backend/common/frame-2.gif) no-repeat 100% 0;}
+
+table.storage tr td.cl {width: 1%;background: url(/images/__backend/common/gray.gif) repeat-y 0 0;}
+table.storage tr td.cc {width: 98%;padding: 5px;}
+table.storage tr td.cr {width: 1%;background: url(/images/__backend/common/gray.gif) repeat-y 100% 0;}
+
+table.storage tr td.bl {width: 1%;height: 17px;background: url(/images/__backend/common/frame-3.gif) no-repeat 0 0;}
+table.storage tr td.bc {width: 98%;height: 17px;background: url(/images/__backend/common/gray.gif) repeat-x 0 3px;}
+table.storage tr td.br {width: 1%;height: 17px;background: url(/images/__backend/common/frame-4.gif) no-repeat 100% 0;}
+
+table.list {margin: 20px 0 0 0;width: 100%;//width: 95%;}
+table.list tr {}
+table.list tr th {font-size: 11px;color: gray;padding: 5px;border-bottom: 2px solid #aaa;}
+table.list tr th.left {text-align: left;}
+table.list tr th.right {text-align: right;}
+table.list tr th.center {text-align: center;}
+table.list tr th.checkbox {width: 5%;background: url(/images/__backend/common/mpic-del.gif) no-repeat 50% 50%;}
+table.list tr td {border-bottom: 1px solid #aaa;}
+table.list tr td.buttons {padding: 20px 0 10px;border: none;text-align: right;}
+table.list tr td.buttons input {margin: 0 20px 0 0;}
+table.list tr td.checkbox {text-align: center; width: 30px;}
+table.list tr td.left {text-align: left;}
+table.list tr td.right {text-align: right;}
+
+.settings dl dd input[type=text] {width: 80%;}
+.loginpass tr th {width: 50px !important; padding-right: 10px; text-align: right !important;}
+.loginpass tr td.field {width: 150px !important; padding-right: 7px;}
+.loginpass tr td.field input {width: 100%;}
+
+.save {margin: 5px 0 15px 0;}
+
+table.form {width: 100%;}
+table.form tr {}
+table.form tr th {font-size: 11px;font-weight: bold;text-align: left;width: 150px;vertical-align: top;}
+table.form tr th.date {} 
+table.form tr.error th {color: #f00}
+table.form tr td {padding: 0 0 15px 0}
+table.form tr td ul {list-style: none;margin: 0;padding: 0;}
+table.form tr td ul li {margin: 0 0 5px 0;padding: 0;}
+table.form tr td input.inn {width: 100%;}
+table.form tr td.date input.inn {width: 90%;margin-right: 10px;}
+table.form tr td.date img {position: relative;top: 5px;}
+table.form tr.error td input.inn {border: 1px solid #f00;}
+
+img.floatleft {float: left;margin: 0 20px 20px 0;border: 1px solid gray}
+
+div.photolist {margin: 10px 0;border-top: 1px solid gray;padding: 10px 0 0;}
+div.photolist .item {float: left; margin-right: 30px; margin-bottom: 20px; height: 95px;}
+div.photolist .item img {display: block;border: 1px solid gray}
+div.photolist .item .check, div.photolist .item .name {margin: 5px 0;}
+
+.error input {border-color: #f22;}
+.error {color: #f22;}
+
+.cols {overflow: hidden;_overflow: visible;height: 1%;}
+.cols .col {width: 32%;float: left;}
+.cols .col p {padding: 5px;}
+
+.add {margin: 15px 5px 0 5px;}
+.err p.message {color: red;}
+
+
+.addNews {margin: 10px 0}
+.addNews a {background: url(/images/__backend/common/plus1.gif) no-repeat 0 60%;padding: 0 0 0 15px;}
+
+.part {margin-bottom: 40px;}
+
+dl {margin-bottom: 5px;font-size: 14px;width: 70%;overflow: hidden;_overflow: visible;_height: 1%;clear: both;}
+dl.item {margin-bottom: 15px;border-bottom: 1px dashed #aaa;padding-bottom: 7px;}
+dl.textarea {width: 100%}
+dl dt {margin: 0 0 5px 0;font-weight: bold;width: 100%;clear: both;}
+dl dd {margin: 0 0 5px;padding: 0;width: 100%;clear: both;}
+dl dd input.text, dl dd select {width: 100%;}
+dl.textarea dd select {width: auto;}
+dl dd input.sort {width: 40px;}
+dl dd input.button {width: auto;padding: 2px 7px;}
+dl dd textarea {width: 100%;height: 300px;}
+dl dd .parent-select {font-family: Courier New, Courier, monospace}
+
+
+/* Новые стили
+------------------------------------------------------------------------ */
+.outer {width: 95%;}
+.outer td {padding-top: 15px;}
+.gray_block2 {border: 1px solid #ccc; padding: 5px 4%; //padding: 5px 20px; -webkit-border-radius: 5px;-moz-border-radius: 5px;}
+.gray_block {border: 1px solid #ccc; padding: 5px 2%; //padding: 5px 20px;-webkit-border-radius: 5px;-moz-border-radius: 5px;}
+.frame_head {color: #005CB9; background:#fff; font:bold; padding: 0 5px; text-transform:uppercase; margin: -12px 0 10px; float: left;}
+.clear {clear: both;}
+.contentname {margin: 0;}
+
+.cent input {margin-bottom: 8px;}
+.cent input.checker {margin-bottom: 0 !important;}
+
+.content input {margin-bottom: 8px;}
+.content input.checker {margin-bottom: 0 !important;}
+
+.auth-top {height: 33px; //height: 35px; background: url(/images/__backend/common/w_h_back.gif);
+-moz-border-radius: 5px 5px 0 0;
+-webkit-border-top-left-radius: 5px;
+-webkit-border-top-right-radius: 5px;
+border-radius: 5px;
+border-top: 1px solid #000;
+border-left: 1px solid #000;
+border-right: 1px solid #000;}
+.auth-top img {position: relative;top: 7px; left: 10px;}
+.auth-bot {background: #fff;
+height: 5px;
+border-bottom: 1px solid #000;
+border-left: 1px solid #000;
+border-right: 1px solid #000;
+-moz-border-radius: 0 0 5px 5px;
+-webkit-border-bottom-left-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;}
+
+.seelink {margin: 0 6% 0 0; text-align: right}
+.seelink a {}
+
+.upperlist {background: url(/images/__backend/struct/line-back.gif) repeat-y 7px 2px}

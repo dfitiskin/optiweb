@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="1.0">
+	<name>database</name>
+	<summary>Работы с базами данных</summary>
+	<description>Предоставляет интерфейс к MySql серверу.</description>
+	<maintainers>
+		<maintainer>
+			<user>fitiskin</user>
+			<name>Дмитрий Фитискин</name>
+			<email>fitiskin@dominion.ru</email>
+			<role>developer</role>
+		</maintainer>
+	</maintainers>
+	<release>
+		<version>1.0.4-b</version>
+		<date>2006-12-28</date>
+		<state>beta</state>
+		<notes>
+			<note>Исправлена ошибка в функции Refresh, в результате которой не листался dataset.database
+      больш еодного раза</note>
+		</notes>
+		<deps>
+			<dep name="kernel" type="module" version="1.0.0-b" rel="ge" />
+			<dep type="mysql" version="4.1" rel="le" />
+		</deps>
+	</release>
+	<changelog>
+		<release>
+		<version>1.0.2-b</version>
+		<date>2006-12-05</date>
+		<state>beta</state>
+		<notes>
+			<note>Добавлена функция UpdateSetOf</note>
+		</notes>
+		<deps>
+			<dep name="kernel" type="module" version="1.0.0-b" rel="ge" />
+			<dep type="mysql" version="4.1" rel="le" />
+		</deps>
+	</release>
+    <release>
+			<version>1.0.0-b</version>
+			<date>2006-11-13</date>
+			<state>beta</state>
+			<deps>
+				<dep name="kernel" type="module" version="1.0.0-b" rel="ge" />
+				<dep type="mysql" version="4.1" rel="le" />
+			</deps>
+		</release>
+	</changelog>
+</package>

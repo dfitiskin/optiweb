@@ -1,0 +1,55 @@
+body {min-width: 999px;}
+
+.wrapper {width: 94%; min-width: 999px; position: relative; margin: 40px auto; overflow: hidden; //zoom: 1; //left: 3%}
+.wrapper .firstable {width: 100%; border-left: 1px solid #000; border-right: 1px solid #000;}
+.wrapper .titler {height: 33px; //height: 35px; background: url(/images/__backend/common/w_h_back.gif);
+-moz-border-radius: 5px 5px 0 0;
+-webkit-border-top-left-radius: 5px;
+-webkit-border-top-right-radius: 5px;
+border-radius: 5px;
+border-top: 1px solid #000;
+border-left: 1px solid #000;
+border-right: 1px solid #000;
+}
+
+.wrapper .bottom {
+background: #fff;
+height: 5px;
+border-bottom: 1px solid #000;
+border-left: 1px solid #000;
+border-right: 1px solid #000;
+-moz-border-radius: 0 0 5px 5px;
+-webkit-border-bottom-left-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+}
+
+.optiweb {position: absolute; top: 9px; left: 15px;}
+.personal {position: absolute; right: 34px; top: 10px;}
+.close {position: absolute; right: 18px; top: 0px;}
+
+table,div,img {border:0}
+#main {width:auto; margin:10px 20px 20px 20px}
+#main div {width:100%}
+#add {width:100%}
+#add div {width:100%}
+#add div.top {height:4px; background:url('/images/__backend/common/ang_t_r.gif') no-repeat right; position:relative; z-index:1; padding:0 16px 0 0}
+#add div.cent {border:1px solid #ccc; position:relative; margin: 5px 0 0; z-index:0; padding:0 7px 10px 7px;-webkit-border-radius: 5px;-moz-border-radius: 5px;}
+#add div.cent p {margin: 0 7px 5px}
+#add div.cent p.modules {margin: 0 7px 5px 25px}
+#add div.cent p.nav {margin: 15px 7px;}
+#add div.cent p.type {margin-top: 10px;}
+#add div.cent p.submit {margin-top: 15px;}
+#add div.cent h1 {background:#fff; float: left; font:bold 100% arial; position:relative; z-index: 10; margin:-8px 0 0 2px; padding:0 5px}
+#add div.cent h1 a {cursor: pointer;}
+#add div.cent input.inn {border:1px solid #bbb; font:12px Tahoma; width:90%; padding:3px 0 3px 4px}
+#add div.bott {height:4px; background:url('/images/__backend/common/ang_b_r.gif') no-repeat right; position:relative; margin:-4px 0 0 0; z-index:1; padding:0 16px 0 0}
+#tab_r {width:100%; height:30px; color:#555; font:bold}
+#tab_r td {height:50px}
+
+.content {margin: 15px 10% 15px 15px; //padding-top: 10px; //width: 85%; //zoom: 1;}
+
+.section {overflow: hidden; padding-left: 5px;}
+.item {overflow: hidden; width: auto !important; height: 12px;}
+.underlist {width: auto !important; margin-left: 18px;}
+.underlist td {overflow: hidden;}
+.underlist td a {overflow: hidden;}

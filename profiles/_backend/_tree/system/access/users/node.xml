@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+		<block name="content" source="d" object="backend.access">
+			<template name='main' type='u' file='access_users.tpl'/>
+			<param name='mode' value='users_list'/>
+		</block>
+	</ruleset>
+	<childs>
+	</childs>
+</node>

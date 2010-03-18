@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<node>
+	<ruleset>
+	</ruleset>
+	<childs>
+		<ruleset>
+			<block name="tab_menu" source="d" object="backend.inter">
+				<template name='main' type='u' file='tab_menu.tpl'/>
+				<param name='mode' value='module_menu'/>
+			</block>
+			<block name="content" source="d" object="backend.inter">
+				<param name='mode' value='module'/>
+			</block>
+		</ruleset>
+	</childs>
+</node>

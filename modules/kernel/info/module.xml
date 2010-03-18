@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<package version="1.0">
+	<name>kernel</name>
+	<summary>Ядро</summary>
+	<description>Основной фреймворк, на базе которого работают основные модули.</description>
+	<maintainers>
+		<maintainer>
+			<user>fitiskin</user>
+			<name>Дмитрий Фитискин</name>
+			<email>fitiskin@dominion.ru</email>
+			<role>developer</role>
+		</maintainer>
+	</maintainers>
+	<release>
+		<version>1.0.6-b</version>
+		<date>2007-02-02</date>
+		<state>beta</state>
+		<notes>
+			<note>Фильтр даты - Февраль был с большой буквы</note>
+		</notes>
+		<deps>
+			<dep type="php" version="4.3.11" rel="le" />
+		</deps>
+	</release>
+	<changelog>
+		<release>
+			<version>1.0.4-b</version>
+			<date>2006-12-21</date>
+			<state>beta</state>
+			<notes>
+				<note>
+					Переработана функция ResizeImage модуля services.imagelib. 
+					Картинки которые меньше заданных размеров не растягиваются. 
+					Реальное изменение размера с растяжением изображения реализованов 
+					в функции RealResizeImage
+				</note>
+			</notes>
+			<deps>
+				<dep type="php" version="4.3.11" rel="le" />
+			</deps>
+		</release>
+		<release>
+			<version>1.0.0-b</version>
+			<date>2006-11-13</date>
+			<state>beta</state>
+			<deps>
+				<dep type="php" version="4.3.11" rel="le" />
+			</deps>
+		</release>	
+		<release>
+			<version>1.0.2-b</version>
+			<date>2006-12-09</date>
+			<state>beta</state>
+			<notes>
+				<note>Обработка функции OnStart сейчас выполнятеся после определения профиля сайта в нормальном режиме. Для совместимости со счетчиком.</note>
+			</notes>
+			<deps>
+				<dep type="php" version="4.3.11" rel="le" />
+			</deps>
+		</release>		
+	</changelog>
+</package>
