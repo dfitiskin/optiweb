@@ -27,9 +27,28 @@ class CSystem_Install
     
     public function restoreDatabase($params)
     {
-        dump($params);        
+        $db = $this->Kernel->link('database.manager');
+        $filemanager = $this->Kernel->link('services.filemanager');
+        
+        $files = $filemanager->getFilesList($params['backup']['file']);
+        
+        foreach ($files as $file)
+        {
+            $dump = $this->Kernel->readFile($file);
+            $lines = explode(';', $dump);
+            
+            foreach ($lines as $sql)
+            {
+                $sql = trim($sql);
+                if (!empty($sql))
+                {
+                    $db->query($sql);  
+                }
+            }
+
+        }
     }
-    
+        
     public function backupDatabase()
     {
         $db = $this->Kernel->link('database.manager');
