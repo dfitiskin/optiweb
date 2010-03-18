@@ -469,7 +469,13 @@ class CServices_Filter
 				case "delbaseurl" :
 					$_st = str_replace('http://'.$_SERVER['HTTP_HOST'].'/','/',$_st);
 					break;
-
+                case "fullurl" :
+                        if (0 !== stripos($_st, 'http://'))
+                        {
+                            $host = str_replace('www.', '', $_SERVER['HTTP_HOST']);
+                            $_st = sprintf('http://%s%s', $host, $_st);
+                        }
+                break;
 			}
 		}
 
