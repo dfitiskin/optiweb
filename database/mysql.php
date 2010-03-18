@@ -323,7 +323,7 @@ class CDataBase_mysql
                 '%s IN ("%s") %s',
                 $field, 
                 implode('", "', $items),
-                $condAnd ? sprintf(' AND %s', $condAnd)
+                $condAnd ? sprintf(' AND %s', $condAnd) : null
             );
             $result = $this->select($table, $fields, $cond, $params, $viewSql);
         }
@@ -340,7 +340,7 @@ class CDataBase_mysql
     function insertValues($table, $items, $viewSql = false)
     {
         $values = sprintf(
-            '"%s"'
+            '"%s"',
             implode(
                 '", "',
                 array_values($items)
@@ -365,7 +365,7 @@ class CDataBase_mysql
     function replaceValues($table, $items, $viewSql = false)
     {
         $values = sprintf(
-            '"%s"'
+            '"%s"',
             implode(
                 '", "',
                 array_values($items)
@@ -398,7 +398,7 @@ class CDataBase_mysql
                 '%s IN ("%s") %s',
                 $field, 
                 implode('", "', $items),
-                $condAnd ? sprintf(' AND %s', $condAnd)
+                $condAnd ? sprintf(' AND %s', $condAnd) : null
             );
             $result = $this->delete($table, $cond, $viewSql);
         }
@@ -425,7 +425,7 @@ class CDataBase_mysql
             }
             
             $result = $this->update(
-                $_table,
+                $table,
                 implode(', ', $eqs),
                 $cond,
                 $viewSql
@@ -454,7 +454,7 @@ class CDataBase_mysql
                 '%s IN ("%s") %s',
                 $field, 
                 implode('", "', $items),
-                $condAnd ? sprintf(' AND %s', $condAnd)
+                $condAnd ? sprintf(' AND %s', $condAnd) : null
             );
             $result = $this->update($table, $eqs, $cond, $viewSql);
         }
@@ -481,7 +481,7 @@ class CDataBase_mysql
                 '%s IN ("%s") %s',
                 $field, 
                 implode('", "', $items),
-                $condAnd ? sprintf(' AND %s', $condAnd)
+                $condAnd ? sprintf(' AND %s', $condAnd) : null
             );
     
             $result = $this->updateValues($table, $values, $cond, $viewSql);
